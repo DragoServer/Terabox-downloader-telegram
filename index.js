@@ -6,6 +6,14 @@ async function main() {
 
   const bot = new Telegraf(process.env.BOT_TOKEN);
 
+  // Subscription function
+  bot.command("subscribe", (ctx) => {
+    ctx.reply(
+      "You are now subscribed to receive notifications for new files from Terabox."
+    );
+    // Here you can add logic to store the subscription status in a database or file
+  });
+
   bot.start(async (ctx) => {
     try {
       ctx.reply(
@@ -13,6 +21,7 @@ async function main() {
         Markup.inlineKeyboard([
           Markup.button.url(" Channel", "https://t.me/botcodes123"),
           Markup.button.url("Report bug", "https://t.me/Armanidrisi_bot"),
+          Markup.button.callback("Subscribe", "subscribe"),
         ]),
       );
     } catch (e) {
@@ -27,11 +36,6 @@ async function main() {
         messageText.includes("terabox.com") ||
         messageText.includes("teraboxapp.com")
       ) {
-        //const parts = messageText.split("/");
-        //const linkID = parts[parts.length - 1];
-
-        // ctx.reply(linkID)
-
         const details = await getDetails(messageText);
         if (details && details.direct_link) {
           try {
@@ -41,7 +45,7 @@ async function main() {
             console.error(e); // Log the error for debugging
           }
         } else {
-          ctx.reply('Something went wrong 🙃');
+          ctx.reply("Something went wrong 🙃");
         }
         console.log(details);
       } else {
@@ -60,3 +64,4 @@ async function main() {
 }
 
 main();
+        
